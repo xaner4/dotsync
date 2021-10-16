@@ -3,6 +3,12 @@
 import os
 import shutil
 
+"""
+Dotsync
+Created By: Marius (https://github.com/xaner4/)
+License: MIT
+"""
+
 HOME = os.getenv('HOME')
 INSTALL_DIR = os.path.join(HOME, '')
 DOTDIR = os.path.join(HOME, ".dotfiles")
@@ -41,6 +47,7 @@ def install(profile):
         dst = os.path.join(INSTALL_DIR, v)
 
         if os.path.islink(dst):
+            # TODO: Ask if want to overwrite exsisting link
             realpath = os.path.realpath(dst)
             print(f"{dst} is already a symlink to {realpath}")
             if realpath == src:
@@ -69,6 +76,7 @@ def install(profile):
 
 
 def backup(dst):
+    # TODO: Check if backup directory already exsisting 
     bd = os.path.join(BACKUP_DIR, HOSTNAME)
     if not os.path.isdir(bd):
         try:
@@ -88,9 +96,9 @@ def backup_dir(src, dst):
         print(e)
 
 
-def backup_file(src, dst)):
+def backup_file(src, dst):
     try:
-        shutil.copy(src, dst))
+        shutil.copy(src, dst)
     except Exception as e:
         print(e)
 
