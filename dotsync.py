@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import os
+import platform
 import shutil
 
 """
-Dotsync
+Dotsync v1.0.1
 Created By: Marius (https://github.com/xaner4/)
 License: MIT
 """
@@ -13,7 +14,7 @@ HOME = os.getenv('HOME')
 INSTALL_DIR = os.path.join(HOME, '')
 DOTDIR = os.path.join(HOME, ".dotfiles")
 BACKUP_DIR = os.path.join(DOTDIR, ".backup")
-HOSTNAME = os.getenv('HOSTNAME')
+HOSTNAME = platform.node()
 
 # TODO: Write better error messages
 # TODO: Write better comments about the code
