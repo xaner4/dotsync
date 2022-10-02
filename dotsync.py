@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from genericpath import isdir
 import os
 import platform
 import shutil
@@ -11,7 +12,6 @@ License: MIT
 """
 
 HOME = os.getenv('HOME')
-INSTALL_DIR = os.path.join(HOME, '')
 DOTDIR = os.path.join(HOME, ".dotfiles")
 BACKUP_DIR = os.path.join(DOTDIR, ".backup")
 HOSTNAME = platform.node()
@@ -40,12 +40,11 @@ def profiles_to_install(pr, ch):
         install.append(t)
     return install
 
-def install(profile):
-    profile_path = os.path.join(DOTDIR, profile)
-    files = os.listdir(profile_path)
-    for i, v in enumerate(files):
-        src = os.path.join(profile_path, v)
-        dst = os.path.join(INSTALL_DIR, v)
+def install(profile, dst_path = HOME, bck = BACKUP_DIR):
+    src_files = os.listdir(profile)
+    for _, f in enumerate(src_files):
+        src = os.path.join(profile, f)
+        dst = os.path.join(dst_path,f)
 
         if os.path.islink(dst):
             # TODO: Ask if want to overwrite exsisting link
@@ -53,13 +52,17 @@ def install(profile):
             print(f"{dst} is already a symlink to {realpath}")
             if realpath == src:
                 continue
-
             answer = input(f"Do you want to overwrite link {dst} [yes/NO]: ").lower()
             if answer == "yes":
                 os.unlink(dst)
             else:
                 continue
-
+        
+        if os.path.exists(dst) and os.path.isdir(dst):
+            if os.path.isdir(src):
+                install(src,dst)
+                continue
+        
         if os.path.exists(dst):
             backup(dst)
             try:
@@ -123,8 +126,10 @@ def main():
     choose = choose_profiles(profiles)
     installs = profiles_to_install(profiles, choose)
 
-    for i, v in enumerate(installs):
-        install(v)
+    for _, v in enumerate(installs):
+        src = os.path.join(DOTDIR, v)
+        print(src, HOME)
+        install(src, HOME)
 
 
 if __name__ == '__main__':
