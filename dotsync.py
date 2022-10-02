@@ -6,7 +6,7 @@ import platform
 import shutil
 
 """
-Dotsync v1.0.1
+Dotsync v1.1.1
 Created By: Marius (https://github.com/xaner4/)
 License: MIT
 """
